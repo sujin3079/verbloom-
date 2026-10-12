@@ -48,7 +48,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               <Image src="/logo.png" alt="" width={32} height={32} />
               버블룸 심리상담소
             </span>
-            <span>비대면 상담 중심 · 저마다 피어나는 때가 있습니다.</span>
+            <div className="f-info">
+              <span>상호 버블룸 심리상담소 · 대표 여수진</span>
+              <span>사업자등록번호 109-30-83095 · 이메일 verbloom0915@gmail.com</span>
+              <span>© 버블룸 심리상담소</span>
+            </div>
           </div>
         </footer>
       </body>

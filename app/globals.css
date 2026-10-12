@@ -50,9 +50,10 @@ nav.menu a.apply:hover{background:var(--leaf-deep);color:var(--paper)}
 .btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
 .hand{font-family:var(--f-hand);font-size:1.6rem;color:var(--leaf);line-height:1.2}
 svg.art{width:100%;height:auto;display:block;max-width:100%}
+.art-box img{width:100%;height:auto;display:block}
 
 /* ── 메인: 첫 화면 ── */
-.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);align-items:center;gap:clamp(24px,5vw,64px);padding-block:clamp(40px,7vw,88px) clamp(32px,5vw,56px)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.3fr);align-items:center;gap:clamp(24px,5vw,64px);padding-block:clamp(40px,7vw,88px) clamp(32px,5vw,56px)}
 .hero h1{font-size:clamp(2.125rem,4.6vw,var(--s5));letter-spacing:-.02em}
 .hero h1 em{font-style:normal;color:var(--leaf);background:linear-gradient(transparent 68%,var(--leaf-wash) 68%)}
 .hero .lead{margin-top:20px;font-size:var(--s1);color:var(--ink-soft);max-width:30ch}
@@ -64,9 +65,8 @@ svg.art{width:100%;height:auto;display:block;max-width:100%}
 .online .wrap{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1fr);align-items:center;gap:clamp(24px,5vw,64px);padding-block:clamp(48px,7vw,88px)}
 .online h2{font-size:clamp(1.625rem,3.2vw,var(--s4))}
 .online .body{display:grid;gap:16px;margin-top:20px;color:var(--ink-soft);max-width:44ch}
-.online ul{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:10px}
-.online li{display:flex;gap:10px;align-items:flex-start;color:var(--ink)}
-.online li::before{content:"";flex:0 0 10px;height:10px;margin-top:.6em;border-radius:50%;background:var(--sky);box-shadow:inset 0 0 0 1.5px #8FBCDD}
+.online .more{color:var(--leaf-deep);font-size:var(--s-1);text-decoration:none;justify-self:start}
+.online .more:hover{text-decoration:underline}
 @media (max-width:820px){.online .wrap{grid-template-columns:1fr}.online .art-box{max-width:460px;margin-inline:auto;width:100%}}
 
 /* ── 상담 대상 3분류 ── */
@@ -74,24 +74,33 @@ svg.art{width:100%;height:auto;display:block;max-width:100%}
 .sec-head{display:grid;gap:8px;margin-bottom:36px}
 .sec-head h2{font-size:clamp(1.625rem,3.2vw,var(--s4))}
 .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
-.card{text-decoration:none;color:inherit;background:var(--paper);border:1.5px solid var(--line);border-radius:22px;padding:28px 24px 24px;display:grid;grid-template-rows:auto auto 1fr auto;gap:10px;text-align:left;cursor:pointer;transition:border-color .2s,transform .2s}
+.card{text-decoration:none;color:inherit;background:var(--paper);border:1.5px solid var(--line);border-radius:22px;padding:28px 24px 24px;display:grid;grid-template-rows:auto auto 1fr auto auto;gap:10px;text-align:left;cursor:pointer;transition:border-color .2s,transform .2s}
 .card:hover{border-color:var(--leaf);transform:translateY(-3px)}
-.card svg{width:72px;height:72px}
+.card img{height:120px;width:auto}
+.card .tags{list-style:none;padding:0;margin:4px 0 0;display:flex;flex-wrap:wrap;gap:6px}
+.card .tags li{background:var(--paper-2);border-radius:999px;padding:3px 12px;font-size:var(--s-1);color:var(--ink-soft)}
 .card h3{font-size:var(--s2)}
 .card p{color:var(--ink-soft)}
 .card .more{font-size:var(--s-1);color:var(--leaf-deep)}
 @media (max-width:820px){.cards{grid-template-columns:1fr}}
 
-/* ── 하단 신청 띠 ── */
-.band .wrap{padding-block:0 clamp(56px,8vw,96px)}
-.band .box{background:var(--leaf-wash);border-radius:28px;padding:clamp(28px,5vw,48px);display:flex;flex-wrap:wrap;gap:20px 32px;align-items:center;justify-content:space-between}
-.band h2{font-size:clamp(1.375rem,2.6vw,var(--s3))}
-.band p{color:var(--ink-soft);margin-top:6px}
+/* ── 상담 진행 과정 ── */
+.flow .wrap{padding-block:clamp(48px,7vw,96px)}
+.sec-head.center{text-align:center;justify-items:center}
+.flow-steps{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+.flow-steps li{display:grid;justify-items:center;align-content:start;text-align:center;gap:6px}
+.flow-steps img{height:140px;width:auto}
+.flow-steps .num{font-family:var(--f-hand);font-size:1.4rem;color:var(--leaf);line-height:1}
+.flow-steps h3{font-size:var(--s2)}
+.flow-steps p{color:var(--ink-soft);font-size:var(--s-1);max-width:20ch}
+@media (max-width:820px){.flow-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 
 footer{border-top:1px solid var(--line);background:var(--paper-2)}
 footer .wrap{padding-block:28px;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;color:var(--ink-soft);font-size:var(--s-1)}
 footer .f-brand{display:flex;align-items:center;gap:10px;font-family:var(--f-display);color:var(--ink);font-size:var(--s0)}
 footer img{width:32px;height:32px;border-radius:50%}
+footer .f-info{display:grid;gap:2px}
 
 /* ── 상세 페이지 ── */
 .page .wrap{padding-block:clamp(32px,5vw,56px) clamp(56px,8vw,96px);max-width:880px}
