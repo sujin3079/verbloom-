@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { createClient } from "@supabase/supabase-js";
 import { useEffect, useRef, useState } from "react";
 import { DoneArt } from "./Art";
 
-/* 상담신청서 (시제품: 실제로 전송되거나 저장되지 않습니다) */
+/* 상담신청서 (작성 완료 시 Supabase의 applications 표에 저장합니다) */
 
 type Question =
   | { id: string; title: string; help?: string; type: "info" }
@@ -74,6 +75,7 @@ export default function ApplyForm() {
   const [done, setDone] = useState(false);
   const [agree, setAgree] = useState(false);
   const [err, setErr] = useState("");
+  const [sending, setSending] = useState(false);
   const [a, setA] = useState<Answers>(EMPTY);
   const formRef = useRef<HTMLFormElement>(null);
   const shown = useRef("-1:false");
@@ -113,13 +115,8 @@ export default function ApplyForm() {
           <DoneArt />
           <h2>상담신청서 작성이 완료되었습니다.</h2>
           <p style={{ color: "var(--ink-soft)" }}>작성해 주셔서 고맙습니다.</p>
-          <p className="note">
-            지금 보고 계신 신청서는 시제품입니다. 입력하신 내용은 실제로 전송되거나 저장되지 않습니다.
-          </p>
+          <p className="note">작성하신 내용이 버블룸 심리상담소에 전달되었습니다.</p>
           <div className="nav-btns" style={{ justifyContent: "center" }}>
-            <button className="btn ghost" type="button" onClick={() => { setDone(false); setStep(Q.length - 1); }}>
-              답변 다시 보기
-            </button>
             <Link className="btn" href="/">
               홈으로 돌아가기
             </Link>
@@ -173,15 +170,35 @@ export default function ApplyForm() {
   const last = step === Q.length - 1;
   const radio = a.radio[q.id];
 
-  const next = () => {
+  const next = async () => {
     if (q.type === "info" && !a.info.name.trim()) {
       setErr("이름을 적어 주세요.");
       formRef.current?.querySelector<HTMLInputElement>("#f-name")?.focus();
       return;
     }
     setErr("");
-    if (last) setDone(true);
-    else setStep(step + 1);
+    if (!last) return setStep(step + 1);
+
+    // 마지막 문항: 저장에 성공했을 때만 완료 화면을 보여 줍니다.
+    setSending(true);
+    try {
+      const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      );
+      const { error } = await supabase.from("applications").insert({
+        name: a.info.name.trim(),
+        phone: a.info.tel,
+        email: a.info.mail,
+        answers: a,
+      });
+      if (error) throw error;
+      setDone(true);
+    } catch {
+      setErr("신청서를 보내지 못했습니다. 잠시 후 다시 시도해 주세요.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -306,8 +323,8 @@ export default function ApplyForm() {
         <button className="btn ghost" type="button" onClick={() => { setErr(""); setStep(step - 1); }}>
           ← 이전
         </button>
-        <button className="btn" type="button" onClick={next}>
-          {last ? "작성 완료" : "다음 →"}
+        <button className="btn" type="button" onClick={next} disabled={sending}>
+          {sending ? "보내는 중…" : last ? "작성 완료" : "다음 →"}
         </button>
       </div>
     </form>
