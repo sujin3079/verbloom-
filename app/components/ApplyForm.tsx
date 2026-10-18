@@ -14,10 +14,19 @@ type Question =
   | { id: string; title: string; help?: string; type: "kw"; opts: string[]; max: number }
   | { id: string; title: string; help?: string; type: "topics"; opts: string[] }
   | { id: string; title: string; help?: string; type: "text"; ph?: string }
-  | { id: string; title: string; help?: string; type: "scale"; rows: string[]; opts: string[] };
+  | { id: string; title: string; help?: string; type: "scale"; rows: string[]; opts: string[] }
+  | { id: string; title: string; help?: string; type: "time"; days: string[]; slots: string[] };
 
 const Q: Question[] = [
   { id: "info", title: "신청자 정보를 알려 주세요.", help: "이름은 꼭 적어 주세요. 나머지는 상담 안내를 위해 사용합니다.", type: "info" },
+  {
+    id: "time",
+    title: "상담 가능한 요일과 시간을 알려 주세요.",
+    help: "가능한 것을 모두 골라 주세요. 고르신 시간을 참고해 상담사가 일정을 제안드립니다.",
+    type: "time",
+    days: ["월", "화", "수", "목", "금", "토", "일"],
+    slots: ["오전 9~11시", "오전 11시~오후 1시", "오후 1~3시", "오후 3~5시", "오후 5~7시", "저녁 7~9시"],
+  },
   { id: "job", title: "현재 직업 상태는 어떠신가요?", type: "radio", opts: ["학생", "직장인", "자영업", "구직 중", "가사", "기타"] },
   { id: "marry", title: "결혼 상태를 알려 주세요.", type: "radio", opts: ["미혼", "기혼", "이혼·별거", "사별", "답하지 않음"] },
   { id: "kids", title: "자녀가 있으신가요?", type: "radio", opts: ["없음", "있음"], extra: { when: "있음", label: "자녀 나이 (예: 7세, 12세)" } },
@@ -176,6 +185,10 @@ export default function ApplyForm() {
       formRef.current?.querySelector<HTMLInputElement>("#f-name")?.focus();
       return;
     }
+    if (q.type === "time" && (!a.list[`${q.id}-days`]?.length || !a.list[`${q.id}-slots`]?.length)) {
+      setErr("가능한 요일과 시간대를 하나 이상 골라 주세요.");
+      return;
+    }
     setErr("");
     if (!last) return setStep(step + 1);
 
@@ -281,6 +294,35 @@ export default function ApplyForm() {
             <label className="f">
               신청하게 된 이유를 짧게 적어 주세요
               <textarea value={a.text[q.id] ?? ""} onChange={(e) => setText(q.id, e.target.value)} />
+            </label>
+          </div>
+        )}
+
+        {q.type === "time" && (
+          <div className="fields">
+            <p style={{ fontSize: "var(--s-1)", color: "var(--ink-soft)" }}>가능한 요일 *</p>
+            <Opts
+              type="checkbox"
+              name={`${q.id}-days`}
+              opts={q.days}
+              selected={a.list[`${q.id}-days`] ?? []}
+              onToggle={(v) => toggleList(`${q.id}-days`, v)}
+            />
+            <p style={{ fontSize: "var(--s-1)", color: "var(--ink-soft)" }}>가능한 시간대 *</p>
+            <Opts
+              type="checkbox"
+              name={`${q.id}-slots`}
+              opts={q.slots}
+              selected={a.list[`${q.id}-slots`] ?? []}
+              onToggle={(v) => toggleList(`${q.id}-slots`, v)}
+            />
+            <label className="f">
+              더 자세히 알려 주실 내용이 있으면 적어 주세요 (선택)
+              <textarea
+                placeholder="예: 화요일은 저녁 8시 이후만 가능해요."
+                value={a.text[q.id] ?? ""}
+                onChange={(e) => setText(q.id, e.target.value)}
+              />
             </label>
           </div>
         )}
