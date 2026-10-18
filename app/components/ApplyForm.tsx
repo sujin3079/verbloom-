@@ -18,7 +18,7 @@ type Question =
   | { id: string; title: string; help?: string; type: "time"; days: string[]; slots: string[] };
 
 const Q: Question[] = [
-  { id: "info", title: "신청자 정보를 알려 주세요.", help: "이름은 꼭 적어 주세요. 나머지는 상담 안내를 위해 사용합니다.", type: "info" },
+  { id: "info", title: "신청자 정보를 알려 주세요.", help: "이름과 연락처는 꼭 적어 주세요. 나머지는 상담 안내를 위해 사용합니다.", type: "info" },
   {
     id: "time",
     title: "상담 가능한 요일과 시간을 알려 주세요.",
@@ -185,6 +185,11 @@ export default function ApplyForm() {
       formRef.current?.querySelector<HTMLInputElement>("#f-name")?.focus();
       return;
     }
+    if (q.type === "info" && !a.info.tel.trim()) {
+      setErr("연락처를 적어 주세요.");
+      formRef.current?.querySelector<HTMLInputElement>("#f-tel")?.focus();
+      return;
+    }
     if (q.type === "time" && (!a.list[`${q.id}-days`]?.length || !a.list[`${q.id}-slots`]?.length)) {
       setErr("가능한 요일과 시간대를 하나 이상 골라 주세요.");
       return;
@@ -252,8 +257,8 @@ export default function ApplyForm() {
             </div>
             <div className="two">
               <label className="f">
-                연락처
-                <input type="tel" value={a.info.tel} onChange={(e) => setInfo("tel", e.target.value)} autoComplete="tel" />
+                연락처 *
+                <input type="tel" id="f-tel" value={a.info.tel} onChange={(e) => setInfo("tel", e.target.value)} autoComplete="tel" />
               </label>
               <label className="f">
                 이메일
