@@ -112,6 +112,17 @@ export default function ApplyForm() {
       setA((p) => ({ ...p, list: { ...p.list, [id]: [...cur, v] } }));
     }
   };
+  // 요일을 빼면 그 요일에 고른 시간대도 함께 지웁니다.
+  const toggleDay = (id: string, d: string) => {
+    const days = a.list[`${id}-days`] ?? [];
+    if (!days.includes(d)) return toggleList(`${id}-days`, d);
+    setErr("");
+    setA((p) => {
+      const list = { ...p.list, [`${id}-days`]: days.filter((x) => x !== d) };
+      delete list[`${id}-${d}`];
+      return { ...p, list };
+    });
+  };
   const setScale = (id: string, row: number, v: string, rows: number) => {
     const cur = a.list[id] ?? Array(rows).fill("");
     setA((p) => ({ ...p, list: { ...p.list, [id]: cur.map((x, i) => (i === row ? v : x)) } }));
@@ -190,9 +201,11 @@ export default function ApplyForm() {
       formRef.current?.querySelector<HTMLInputElement>("#f-tel")?.focus();
       return;
     }
-    if (q.type === "time" && (!a.list[`${q.id}-days`]?.length || !a.list[`${q.id}-slots`]?.length)) {
-      setErr("가능한 요일과 시간대를 하나 이상 골라 주세요.");
-      return;
+    if (q.type === "time") {
+      const days = a.list[`${q.id}-days`] ?? [];
+      if (!days.length) return setErr("가능한 요일을 하나 이상 골라 주세요.");
+      const missing = days.find((d) => !a.list[`${q.id}-${d}`]?.length);
+      if (missing) return setErr(`${missing}요일에 가능한 시간대를 하나 이상 골라 주세요.`);
     }
     setErr("");
     if (!last) return setStep(step + 1);
@@ -311,16 +324,23 @@ export default function ApplyForm() {
               name={`${q.id}-days`}
               opts={q.days}
               selected={a.list[`${q.id}-days`] ?? []}
-              onToggle={(v) => toggleList(`${q.id}-days`, v)}
+              onToggle={(v) => toggleDay(q.id, v)}
             />
-            <p style={{ fontSize: "var(--s-1)", color: "var(--ink-soft)" }}>가능한 시간대 *</p>
-            <Opts
-              type="checkbox"
-              name={`${q.id}-slots`}
-              opts={q.slots}
-              selected={a.list[`${q.id}-slots`] ?? []}
-              onToggle={(v) => toggleList(`${q.id}-slots`, v)}
-            />
+            {/* 고른 요일마다 시간대를 따로 고릅니다 */}
+            {q.days
+              .filter((d) => (a.list[`${q.id}-days`] ?? []).includes(d))
+              .map((d) => (
+                <div key={d} className="fields" style={{ marginTop: 6 }}>
+                  <p style={{ fontSize: "var(--s-1)", color: "var(--ink-soft)" }}>{d}요일 가능한 시간대 *</p>
+                  <Opts
+                    type="checkbox"
+                    name={`${q.id}-${d}`}
+                    opts={q.slots}
+                    selected={a.list[`${q.id}-${d}`] ?? []}
+                    onToggle={(v) => toggleList(`${q.id}-${d}`, v)}
+                  />
+                </div>
+              ))}
             <label className="f">
               더 자세히 알려 주실 내용이 있으면 적어 주세요 (선택)
               <textarea

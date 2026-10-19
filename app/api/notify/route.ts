@@ -37,9 +37,9 @@ function variables(r: Application) {
   const text = a.text ?? {};
   const hard = list.hard ?? [];
   const kids = radio.kids?.val ? `${radio.kids.val}${radio.kids.extra ? ` (${radio.kids.extra})` : ""}` : "";
+  // 요일별 시간: "월 오전 9~11시 / 수 오후 1~3시, 오후 3~5시"
   const time = [
-    (list["time-days"] ?? []).join(", "),
-    (list["time-slots"] ?? []).join(", "),
+    ...(list["time-days"] ?? []).map((d) => `${d} ${(list[`time-${d}`] ?? list["time-slots"] ?? []).join(", ")}`.trim()),
     text.time ? `메모: ${text.time}` : "",
   ]
     .filter(Boolean)
