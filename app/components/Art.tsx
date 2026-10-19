@@ -30,20 +30,3 @@ export function CrayonDefs() {
     </svg>
   );
 }
-
-// 신청서 작성 완료 그림
-export function DoneArt() {
-  return (
-    <svg viewBox="0 0 120 120" aria-hidden="true">
-      <g filter="url(#crayon)">
-        <circle cx="60" cy="60" r="54" fill="#D9ECF8" />
-      </g>
-      <g filter="url(#wobble)">
-        <path d="M60 100 V62" stroke="#4F7A45" strokeWidth="4" strokeLinecap="round" />
-        <path d="M60 84 Q44 82 40 70 Q56 70 60 84 Z" fill="#7FAE69" />
-        <path d="M60 78 Q76 76 80 64 Q64 64 60 78 Z" fill="#7FAE69" />
-        <use href="#flower" x="60" y="50" transform="translate(60 50) scale(1.5) translate(-60 -50)" />
-      </g>
-    </svg>
-  );
-}
