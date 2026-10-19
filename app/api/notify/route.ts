@@ -98,7 +98,7 @@ export async function POST(request: Request) {
     {
       to: digits(process.env.COUNSELOR_PHONE),
       from,
-      kakaoOptions: { pfId, templateId: process.env.SOLAPI_TEMPLATE_ID, variables: variables(body.record) },
+      kakaoOptions: { pfId, templateId: process.env.SOLAPI_TEMPLATE_ID, variables: variables(body.record), disableSms: true },
     },
   ];
 
@@ -106,13 +106,18 @@ export async function POST(request: Request) {
   const applicantTemplate = process.env.SOLAPI_TEMPLATE_ID_APPLICANT;
   const applicantPhone = digits(body.record.phone ?? undefined);
   if (applicantTemplate && applicantPhone) {
+    const name = body.record.name || "고객";
     messages.push({
       to: applicantPhone,
       from,
+      // 카카오톡이 안 되는 번호는 아래 문자(LMS)로 대신 발송됩니다.
+      type: "LMS",
+      subject: "[버블룸 심리상담소] 상담신청 완료",
+      text: `[버블룸 심리상담소]\n${name}님, 상담신청이 완료되었습니다.\n\n보내 주신 신청서를 확인한 뒤\n1~3일 안에 상담사가 연락드리겠습니다.\n\n※ 이 메시지는 버블룸 심리상담소 홈페이지에서 상담신청서를 제출하신 분께 발송됩니다.`,
       kakaoOptions: {
         pfId,
         templateId: applicantTemplate,
-        variables: { "#{이름}": body.record.name || "고객" },
+        variables: { "#{이름}": name },
       },
     });
   }
