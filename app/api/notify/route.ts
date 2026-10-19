@@ -90,22 +90,37 @@ export async function POST(request: Request) {
     return Response.json({ ok: true, skipped: true });
   }
 
+  const from = digits(process.env.SOLAPI_SENDER);
+  const pfId = process.env.SOLAPI_PFID;
+
+  // 1) 상담사에게 보내는 새 신청 알림
+  const messages: unknown[] = [
+    {
+      to: digits(process.env.COUNSELOR_PHONE),
+      from,
+      kakaoOptions: { pfId, templateId: process.env.SOLAPI_TEMPLATE_ID, variables: variables(body.record) },
+    },
+  ];
+
+  // 2) 신청한 분에게 보내는 접수 완료 안내 (SOLAPI_TEMPLATE_ID_APPLICANT 를 넣었을 때만)
+  const applicantTemplate = process.env.SOLAPI_TEMPLATE_ID_APPLICANT;
+  const applicantPhone = digits(body.record.phone ?? undefined);
+  if (applicantTemplate && applicantPhone) {
+    messages.push({
+      to: applicantPhone,
+      from,
+      kakaoOptions: {
+        pfId,
+        templateId: applicantTemplate,
+        variables: { "#{이름}": body.record.name || "고객" },
+      },
+    });
+  }
+
   const res = await fetch("https://api.solapi.com/messages/v4/send-many/detail", {
     method: "POST",
     headers: { Authorization: solapiAuth(), "Content-Type": "application/json" },
-    body: JSON.stringify({
-      messages: [
-        {
-          to: digits(process.env.COUNSELOR_PHONE),
-          from: digits(process.env.SOLAPI_SENDER),
-          kakaoOptions: {
-            pfId: process.env.SOLAPI_PFID,
-            templateId: process.env.SOLAPI_TEMPLATE_ID,
-            variables: variables(body.record),
-          },
-        },
-      ],
-    }),
+    body: JSON.stringify({ messages }),
   });
 
   const result = (await res.json().catch(() => ({}))) as { failedMessageList?: unknown[] };
