@@ -132,7 +132,7 @@ export default function ApplyForm() {
     return (
       <form className="panel" ref={formRef} noValidate onSubmit={(e) => e.preventDefault()}>
         <div className="done">
-          <Image src="/images/done.png" alt="" width={320} height={209} priority />
+          <Image src="/images/done.png" alt="" width={240} height={157} priority />
           <h2>상담신청서 작성이 완료되었습니다.</h2>
           <p style={{ color: "var(--ink-soft)" }}>작성해 주셔서 고맙습니다.</p>
           <p className="note">작성하신 내용이 버블룸 심리상담소에 전달되었습니다.</p>
