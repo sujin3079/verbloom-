@@ -30,6 +30,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.verbloom.co.kr"),
   title: "버블룸 심리상담소",
   verification: {
+    google: "KtsrkPTU7cy4JRC3ITNmOy3lJeIWR7GvtGyhJLDdsK4",
     other: { "naver-site-verification": "65477318a312238817d9a946c8a320b3015e6024" },
   },
   description:
