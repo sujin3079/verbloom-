@@ -31,7 +31,13 @@ export const metadata: Metadata = {
   title: "버블룸 심리상담소",
   verification: {
     google: "KtsrkPTU7cy4JRC3ITNmOy3lJeIWR7GvtGyhJLDdsK4",
-    other: { "naver-site-verification": "65477318a312238817d9a946c8a320b3015e6024" },
+    other: {
+      // 네이버 계정마다 확인 코드가 달라서 두 개를 모두 둡니다.
+      "naver-site-verification": [
+        "65477318a312238817d9a946c8a320b3015e6024",
+        "95273fc8a2c47a4700de4b1e826cfd7e52d8d54e",
+      ],
+    },
   },
   description:
     "저마다 피어나는 때가 있습니다. 버블룸 심리상담소는 당신이 자신의 속도로, 자신만의 방식으로 피어날 수 있도록 곁에 있습니다.",
