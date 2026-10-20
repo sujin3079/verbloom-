@@ -27,7 +27,11 @@ const pen = Nanum_Pen_Script({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.verbloom.co.kr"),
   title: "버블룸 심리상담소",
+  verification: {
+    other: { "naver-site-verification": "65477318a312238817d9a946c8a320b3015e6024" },
+  },
   description:
     "저마다 피어나는 때가 있습니다. 버블룸 심리상담소는 당신이 자신의 속도로, 자신만의 방식으로 피어날 수 있도록 곁에 있습니다.",
 };
