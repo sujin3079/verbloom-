@@ -67,6 +67,10 @@ export default function Home() {
               height={372}
               priority
             />
+            {/* 상담 중인 내담자용 예약관리 (별도 사이트) — 그림 위 하늘, 상담절차 메뉴 아래 */}
+            <a className="btn sky member-cta" href="https://reserve.verbloom.co.kr" aria-label="상담 중이신 분 예약관리">
+              <span className="pc-only">상담 중이신 분 · </span>예약관리 <span aria-hidden="true">→</span>
+            </a>
           </div>
         </div>
       </section>
