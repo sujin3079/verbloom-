@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Gowun_Batang, Gowun_Dodum, Nanum_Pen_Script } from "next/font/google";
 import Image from "next/image";
+import Link from "next/link";
 import Header from "./components/Header";
 import { CrayonDefs } from "./components/Art";
 import "./globals.css";
@@ -62,6 +63,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <div className="f-info">
               <span>상호 버블룸 심리상담소 · 대표 여수진</span>
               <span>사업자등록번호 109-30-83095 · 이메일 verbloom0915@gmail.com</span>
+              <span>
+                고객센터 010-3030-7746 · <Link href="/refund">상담료 및 환불정책</Link>
+              </span>
               <span>© 버블룸 심리상담소</span>
             </div>
           </div>
