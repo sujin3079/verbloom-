@@ -63,6 +63,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <div className="f-info">
               <span>상호 버블룸 심리상담소 · 대표 여수진</span>
               <span>사업자등록번호 109-30-83095 · 이메일 verbloom0915@gmail.com</span>
+              <span>사업장 주소 서울특별시 서초구 잠원로4길 50, 1동 4층 405호 (상담은 온라인 비대면으로 진행합니다)</span>
               <span>
                 고객센터 010-3030-7746 · <Link href="/refund">상담료 및 환불정책</Link>
               </span>
