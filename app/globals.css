@@ -175,3 +175,13 @@ footer .f-info{display:grid;gap:2px}
 .done .note{background:var(--paper);border:1px dashed var(--ink-soft);border-radius:12px;padding:12px 16px;font-size:var(--s-1);color:var(--ink-soft);max-width:46ch}
 .page .steps + .btn{margin-top:8px}
 .panel{scroll-margin-top:96px}
+
+/* ── 개인정보 처리방침 ── */
+.policy-doc{display:grid;gap:28px;margin-top:36px}
+.policy-doc h2{font-size:var(--s2);margin-bottom:8px}
+.policy-doc p{color:var(--ink-soft);margin-top:8px}
+.policy-doc ul{margin:8px 0 0;padding-left:1.1em;display:grid;gap:6px;color:var(--ink-soft)}
+.table-wrap{overflow-x:auto;margin-top:10px}
+.policy-doc table{border-collapse:collapse;width:100%;min-width:520px;font-size:var(--s-1)}
+.policy-doc th,.policy-doc td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;white-space:pre-line}
+.policy-doc th{background:var(--paper-2);font-weight:400;color:var(--ink)}

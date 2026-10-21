@@ -83,6 +83,7 @@ export default function ApplyForm() {
   const [step, setStep] = useState(-1); // -1: 동의 화면
   const [done, setDone] = useState(false);
   const [agree, setAgree] = useState(false);
+  const [agreeSensitive, setAgreeSensitive] = useState(false);
   const [err, setErr] = useState("");
   const [sending, setSending] = useState(false);
   const [a, setA] = useState<Answers>(EMPTY);
@@ -155,17 +156,33 @@ export default function ApplyForm() {
         </p>
         <div className="consent" style={{ marginTop: 18 }} tabIndex={0}>
           <p>
-            <strong>개인정보 및 민감정보 수집·이용 안내 (초안)</strong>
+            <strong>[필수] 개인정보 수집·이용 동의</strong>
           </p>
-          <p>수집 항목: 이름, 나이, 성별, 연락처, 이메일, 상담 신청 이유와 현재 어려움에 관한 내용</p>
+          <p>수집 항목: 이름, 연락처(필수) / 나이, 성별, 이메일, 상담 가능한 요일·시간, 직업·결혼 상태, 자녀 여부와 나이(선택)</p>
           <p>이용 목적: 상담 신청 확인, 초기상담 준비, 상담 일정 안내</p>
-          <p>접수 확인과 안내를 위해 이름과 연락처가 카카오 알림톡·문자 발송 업체(솔라피)를 통해 전달되며, 신청 내용은 상담사에게 알림톡으로 전달됩니다.</p>
-          <p>보관 기간과 파기 방법, 접근 권한은 정식 운영 전에 확정해 안내할 예정입니다.</p>
+          <p>보유 기간: 상담을 진행하지 않으면 접수일로부터 1년, 상담을 진행하면 상담 종결일로부터 3년 보관 후 파기합니다.</p>
+          <p>
+            <strong>[필수] 민감정보 처리 동의</strong>
+          </p>
+          <p>수집 항목: 상담 신청 이유, 이전 심리·정신건강 서비스 이용 경험, 요즘 어려움의 정도, 안전과 관련한 응답, 자유롭게 적은 내용</p>
+          <p>이용 목적: 상담 준비, 위기 상황 확인 (상담사만 열람합니다) / 보유 기간: 위와 같습니다.</p>
+          <p>
+            <strong>처리 위탁 안내</strong>
+          </p>
+          <p>
+            신청서는 Supabase(데이터 보관, 서버 위치 서울)에 저장되며, 접수 확인과 안내를 위해 이름과 연락처가 솔라피·카카오(알림톡·문자)를 통해 전달되고 신청 내용은 상담사에게 알림톡으로 전달됩니다. 자세한 내용은{" "}
+            <Link href="/privacy">개인정보 처리방침</Link>을 확인해 주세요.
+          </p>
+          <p>만 14세 미만은 보호자(법정대리인)가 함께 신청하고 동의해 주세요.</p>
           <p>동의하지 않으실 수 있으며, 동의하지 않으면 신청서를 작성할 수 없습니다.</p>
         </div>
         <label className="check">
           <input type="checkbox" checked={agree} onChange={(e) => { setAgree(e.target.checked); setErr(""); }} />
-          <span>위 내용을 읽었고, 개인정보 및 민감정보 수집·이용에 동의합니다.</span>
+          <span>[필수] 개인정보 수집·이용에 동의합니다.</span>
+        </label>
+        <label className="check">
+          <input type="checkbox" checked={agreeSensitive} onChange={(e) => { setAgreeSensitive(e.target.checked); setErr(""); }} />
+          <span>[필수] 상담 신청 이유 등 민감정보 처리에 동의합니다.</span>
         </label>
         {err && <p className="err">{err}</p>}
         <div className="nav-btns">
@@ -174,7 +191,7 @@ export default function ApplyForm() {
             className="btn"
             type="button"
             onClick={() => {
-              if (!agree) return setErr("동의해 주셔야 시작할 수 있습니다.");
+              if (!agree || !agreeSensitive) return setErr("두 항목 모두 동의해 주셔야 시작할 수 있습니다.");
               setErr("");
               setStep(0);
             }}
