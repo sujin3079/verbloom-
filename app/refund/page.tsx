@@ -46,7 +46,7 @@ const BLOCKS = [
   },
   {
     title: "문의",
-    items: ["전화 010-3030-7746", "이메일 verbloom0915@gmail.com"],
+    items: ["카카오톡 채널 pf.kakao.com/_TxoFxiX/chat", "전화 010-3030-7746", "이메일 verbloom0915@gmail.com"],
   },
 ];
 
