@@ -102,22 +102,15 @@ export async function POST(request: Request) {
     },
   ];
 
-  // 2) 신청한 분에게 보내는 접수 완료 안내 (SOLAPI_TEMPLATE_ID_APPLICANT 를 넣었을 때만)
-  const applicantTemplate = process.env.SOLAPI_TEMPLATE_ID_APPLICANT;
+  // 2) 신청한 분에게 보내는 접수 완료 안내 — 예약관리 안내와 같이 문자로 보냅니다.
+  //    잠금화면에 보여도 괜찮도록 '상담'이라는 말은 쓰지 않습니다.
   const applicantPhone = digits(body.record.phone ?? undefined);
-  if (applicantTemplate && applicantPhone) {
+  if (applicantPhone) {
     const name = body.record.name || "고객";
     messages.push({
       to: applicantPhone,
       from,
-      // 카카오톡이 안 되는 번호는 아래 제목/내용의 문자(LMS)로 대신 발송됩니다.
-      subject: "[버블룸 심리상담소] 상담신청 완료",
-      text: `[버블룸 심리상담소]\n${name}님, 상담신청이 완료되었습니다.\n\n보내 주신 신청서를 확인한 뒤\n1~3일 안에 상담사가 연락드리겠습니다.\n\n※ 이 메시지는 버블룸 심리상담소 홈페이지에서 상담신청서를 제출하신 분께 발송됩니다.`,
-      kakaoOptions: {
-        pfId,
-        templateId: applicantTemplate,
-        variables: { "#{이름}": name },
-      },
+      text: `[버블룸] 신청 접수 안내\n${name}님, 신청이 접수되었습니다.\n확인 후 1~3일 안에 연락드리겠습니다.`,
     });
   }
 
