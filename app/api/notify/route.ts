@@ -110,7 +110,7 @@ export async function POST(request: Request) {
     messages.push({
       to: applicantPhone,
       from,
-      text: `[버블룸] 신청 접수 안내\n${name}님, 신청이 접수되었습니다.\n확인 후 1~3일 안에 연락드리겠습니다.`,
+      text: `[버블룸] 신청 접수 안내\n${name}님, 신청이 접수되었습니다.\n확인 후 최대한 빨리 연락드리겠습니다.`,
     });
   }
 

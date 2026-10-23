@@ -214,8 +214,9 @@ export default function ApplyForm() {
       formRef.current?.querySelector<HTMLInputElement>("#f-name")?.focus();
       return;
     }
-    if (q.type === "info" && !a.info.tel.trim()) {
-      setErr("연락처를 적어 주세요.");
+    // 휴대전화번호를 끝까지 입력해야 넘어갑니다 (010-1234-5678 / 01012345678 모두 가능).
+    if (q.type === "info" && !/^(010\d{8}|01[16789]\d{7,8})$/.test(a.info.tel.replace(/\D/g, ""))) {
+      setErr(a.info.tel.trim() ? "휴대전화번호를 끝까지 정확히 적어 주세요. (예: 010-1234-5678)" : "연락처를 적어 주세요.");
       formRef.current?.querySelector<HTMLInputElement>("#f-tel")?.focus();
       return;
     }
@@ -289,7 +290,7 @@ export default function ApplyForm() {
             <div className="two">
               <label className="f">
                 연락처 *
-                <input type="tel" id="f-tel" value={a.info.tel} onChange={(e) => setInfo("tel", e.target.value)} autoComplete="tel" />
+                <input type="tel" id="f-tel" value={a.info.tel} onChange={(e) => setInfo("tel", e.target.value)} autoComplete="tel" inputMode="tel" placeholder="010-1234-5678" />
               </label>
               <label className="f">
                 이메일
